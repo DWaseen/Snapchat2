@@ -3,7 +3,7 @@
 //  Snapchat
 //
 //  Created by Dan Waseen on 1/22/18.
-//  Copyright © 2018 RevWon. All rights reserved.....
+//  Copyright © 2018 RevWon. All rights reserved........
 //
 
 import UIKit
