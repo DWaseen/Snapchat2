@@ -23,7 +23,7 @@ class SignInViewController: UIViewController {
         super.viewDidLoad()
         // Do any additional setup after loading the view, typically from a nib.
         
-        FIRDatabase.database().reference().child("Hello").setValue("I am Cool")
+   //     FIRDatabase.database().reference().child("Hello").setValue("I am Cool")
         
     }
     

@@ -19,11 +19,14 @@ class PictureViewController: UIViewController, UIImagePickerControllerDelegate, 
     
     var imagePicker = UIImagePickerController()
     
+    var uuid = NSUUID().uuidString
+    
     override func viewDidLoad() {
         super.viewDidLoad()
         
         // Do any additional setup after loading the view.
         imagePicker.delegate = self
+        nextButton.isEnabled = false
     }
     
     func imagePickerController(_ picker: UIImagePickerController, didFinishPickingMediaWithInfo info: [String : Any]) {
@@ -32,6 +35,8 @@ class PictureViewController: UIViewController, UIImagePickerControllerDelegate, 
         
         imageView.image = image
         imageView.backgroundColor = UIColor.clear
+        
+        nextButton.isEnabled = true
         
         imagePicker.dismiss(animated: true, completion: nil)
     }
@@ -44,25 +49,30 @@ class PictureViewController: UIViewController, UIImagePickerControllerDelegate, 
         
         let  imageData = UIImageJPEGRepresentation(imageView.image!, 0.1)!
         
-        imagesFolder.child("\(NSUUID().uuidString).jpg").put(imageData, metadata: nil, completion: {(metadata, error) in
+        imagesFolder.child("\(uuid).jpg").put(imageData, metadata: nil, completion: {(metadata, error) in
             
             print("We tried to upload")
             
             if error != nil{
                 print("we had error: \(error!)")
             }else{
-                self.performSegue(withIdentifier: "selectUserSeque", sender: nil)
+                self.performSegue(withIdentifier: "selectUserSeque", sender: metadata?.downloadURL()!.absoluteString)
             }
         })
     }
     
     override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
         
+        let nextVC = segue.destination as! SelectUserViewController
+        nextVC.imageURL = sender as! String
+        nextVC.descrip = descriptionTextField.text!
+        nextVC.uuid = uuid
+        
     }
     
     @IBAction func cameraTapped(_ sender: Any) {
         
-        imagePicker.sourceType = .photoLibrary
+        imagePicker.sourceType = .camera
         imagePicker.allowsEditing = false
         
         present(imagePicker, animated: true, completion: nil)
